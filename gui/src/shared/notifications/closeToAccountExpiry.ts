@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { sprintf } from 'sprintf-js';
 import { links } from '../../config.json';
 import { messages } from '../../shared/gettext';
@@ -10,19 +9,19 @@ import {
   SystemNotificationProvider,
 } from './notification';
 
-interface AccountExpiryContext {
+interface CloseToAccountExpiryNotificationContext {
   accountExpiry: AccountExpiryFormatter;
   tooSoon?: boolean;
 }
 
-export class AccountExpiryNotificationProvider
+export class CloseToAccountExpiryNotificationProvider
   implements InAppNotificationProvider, SystemNotificationProvider {
-  public constructor(private context: AccountExpiryContext) {}
+  public constructor(private context: CloseToAccountExpiryNotificationContext) {}
 
   public mayDisplay() {
     return (
       !this.context.accountExpiry.hasExpired() &&
-      this.context.accountExpiry.willHaveExpiredAt(moment().add(3, 'days').toDate()) &&
+      this.context.accountExpiry.willHaveExpiredInThreeDays() &&
       !this.context.tooSoon
     );
   }
