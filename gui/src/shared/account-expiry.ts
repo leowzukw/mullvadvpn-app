@@ -2,19 +2,38 @@ import moment from 'moment';
 import { sprintf } from 'sprintf-js';
 import { messages } from './gettext';
 
-export default class AccountExpiry {
-  private expiry: moment.Moment;
+export class AccountExpiry {
+  protected expiry: moment.Moment;
 
-  constructor(isoString: string, locale: string) {
-    this.expiry = moment(isoString).locale(locale);
+  constructor(isoString: string) {
+    this.expiry = moment(isoString);
+  }
+
+  public get moment() {
+    return this.expiry;
   }
 
   public hasExpired(): boolean {
     return this.willHaveExpiredAt(new Date());
   }
 
+  public willHaveExpiredInThreeDays(): boolean {
+    return this.willHaveExpiredAt(moment().add(3, 'days').toDate());
+  }
+
   public willHaveExpiredAt(date: Date): boolean {
     return this.expiry.isSameOrBefore(date);
+  }
+
+  public remainingMilliseconds(): number {
+    return this.expiry.diff(new Date());
+  }
+}
+
+export class AccountExpiryFormatter extends AccountExpiry {
+  constructor(isoString: string, locale: string) {
+    super(isoString);
+    this.expiry = this.expiry.locale(locale);
   }
 
   public formattedDate(): string {

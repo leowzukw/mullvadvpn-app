@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, Styles, View } from 'reactxp';
 import styled from 'styled-components';
-import AccountExpiry from '../../shared/account-expiry';
+import { AccountExpiry } from '../../shared/account-expiry';
 import ExpiredAccountErrorViewContainer from '../containers/ExpiredAccountErrorViewContainer';
 import NotificationArea from '../components/NotificationArea';
 import { AuthFailureKind, parseAuthFailure } from '../../shared/auth-failure';

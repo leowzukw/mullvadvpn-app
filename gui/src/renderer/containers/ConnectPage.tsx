@@ -3,7 +3,7 @@ import log from 'electron-log';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sprintf } from 'sprintf-js';
-import AccountExpiry from '../../shared/account-expiry';
+import { AccountExpiry } from '../../shared/account-expiry';
 import { messages } from '../../shared/gettext';
 import Connect from '../components/Connect';
 import withAppContext, { IAppContext } from '../context';
@@ -65,9 +65,7 @@ function getRelayName(
 
 const mapStateToProps = (state: IReduxState) => {
   return {
-    accountExpiry: state.account.expiry
-      ? new AccountExpiry(state.account.expiry, state.userInterface.locale)
-      : undefined,
+    accountExpiry: state.account.expiry ? new AccountExpiry(state.account.expiry) : undefined,
     loginState: state.account.status,
     blockWhenDisconnected: state.settings.blockWhenDisconnected,
     selectedRelayName: getRelayName(state.settings.relaySettings, state.settings.relayLocations),

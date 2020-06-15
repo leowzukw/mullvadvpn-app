@@ -3,7 +3,7 @@ import log from 'electron-log';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Types } from 'reactxp';
-import AccountExpiry from '../../shared/account-expiry';
+import { AccountExpiryFormatter } from '../../shared/account-expiry';
 import {
   AccountExpiryNotificationProvider,
   BlockWhenDisconnectedNotificationProvider,
@@ -35,7 +35,7 @@ interface IProps {
 export default function NotificationArea(props: IProps) {
   const accountExpiry = useSelector((state: IReduxState) =>
     state.account.expiry
-      ? new AccountExpiry(state.account.expiry, state.userInterface.locale)
+      ? new AccountExpiryFormatter(state.account.expiry, state.userInterface.locale)
       : undefined,
   );
   const tunnelState = useSelector((state: IReduxState) => state.connection.status);

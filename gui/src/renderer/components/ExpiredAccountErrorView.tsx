@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component, Text, View } from 'reactxp';
 import { sprintf } from 'sprintf-js';
 import { links } from '../../config.json';
-import AccountExpiry from '../../shared/account-expiry';
+import { AccountExpiry } from '../../shared/account-expiry';
 import { AccountToken } from '../../shared/daemon-rpc-types';
 import { messages } from '../../shared/gettext';
 import { LoginState } from '../redux/account/reducers';

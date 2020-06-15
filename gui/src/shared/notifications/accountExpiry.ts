@@ -2,7 +2,7 @@ import moment from 'moment';
 import { sprintf } from 'sprintf-js';
 import { links } from '../../config.json';
 import { messages } from '../../shared/gettext';
-import AccountExpiry from '../account-expiry';
+import { AccountExpiryFormatter } from '../account-expiry';
 import {
   InAppNotification,
   InAppNotificationProvider,
@@ -11,7 +11,7 @@ import {
 } from './notification';
 
 interface AccountExpiryContext {
-  accountExpiry: AccountExpiry;
+  accountExpiry: AccountExpiryFormatter;
   tooSoon?: boolean;
 }
 
