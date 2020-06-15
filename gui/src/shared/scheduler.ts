@@ -11,7 +11,12 @@ export class Scheduler {
   public cancel() {
     if (this.timer) {
       clearTimeout(this.timer);
+      this.timer = undefined;
     }
+  }
+
+  public get isRunning() {
+    return this.timer !== undefined;
   }
 }
 
