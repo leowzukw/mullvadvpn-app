@@ -2,6 +2,7 @@ import { app, nativeImage, NativeImage, Notification } from 'electron';
 import log from 'electron-log';
 import os from 'os';
 import path from 'path';
+import { AccountExpiry } from '../shared/account-expiry';
 import { TunnelState } from '../shared/daemon-rpc-types';
 import {
   BlockWhenDisconnectedNotificationProvider,
@@ -47,14 +48,18 @@ export default class NotificationController {
     }
   }
 
-  public notifyTunnelState(tunnelState: TunnelState, blockWhenDisconnected: boolean) {
+  public notifyTunnelState(
+    tunnelState: TunnelState,
+    blockWhenDisconnected: boolean,
+    accountExpiry?: AccountExpiry,
+  ) {
     const notificationProviders: SystemNotificationProvider[] = [
       new ConnectingNotificationProvider({ tunnelState, reconnecting: this.reconnecting }),
       new ConnectedNotificationProvider(tunnelState),
       new ReconnectingNotificationProvider(tunnelState),
       new BlockWhenDisconnectedNotificationProvider({ tunnelState, blockWhenDisconnected }),
       new DisconnectedNotificationProvider(tunnelState),
-      new ErrorNotificationProvider(tunnelState),
+      new ErrorNotificationProvider({ tunnelState, accountExpiry }),
     ];
 
     const notificationProvider = notificationProviders.find((notification) =>
