@@ -1,5 +1,5 @@
 import log from 'electron-log';
-import moment from 'moment';
+import { AccountExpiry } from '../shared/account-expiry';
 import { AccountToken, IAccountData } from '../shared/daemon-rpc-types';
 import consumePromise from '../shared/promise';
 import { Scheduler } from '../shared/scheduler';
@@ -85,7 +85,11 @@ export default class AccountDataCache {
 
       if (this.currentAccount === accountToken) {
         this.setValue(accountData);
-        this.scheduleRefetchIfExpired(accountToken, accountData);
+
+        const accountExpiry = new AccountExpiry(accountData.expiry);
+        this.scheduleRefetchIfExpired(accountToken, accountExpiry);
+        this.scheduleRefetchBeforeExpiry(accountToken, accountExpiry);
+
         this.waitStrategy.reset();
         this.performingFetch = false;
       }
@@ -97,10 +101,20 @@ export default class AccountDataCache {
     }
   }
 
-  private scheduleRefetchIfExpired(accountToken: AccountToken, accountData: IAccountData) {
-    const hasExpired = moment(accountData.expiry).isSameOrBefore(new Date());
-    if (hasExpired) {
+  private scheduleRefetchIfExpired(accountToken: AccountToken, accountExpiry: AccountExpiry) {
+    if (accountExpiry.hasExpired()) {
       this.scheduleFetch(accountToken, EXPIRED_ACCOUNT_REFRESH_PERIOD);
+    }
+  }
+
+  private scheduleRefetchBeforeExpiry(accountToken: AccountToken, accountExpiry: AccountExpiry) {
+    const oneMinuteBeforeExpiry = accountExpiry.moment.clone().subtract(1, 'minute');
+    if (
+      oneMinuteBeforeExpiry.isSameOrAfter(new Date()) &&
+      accountExpiry.willHaveExpiredInThreeDays()
+    ) {
+      const delay = oneMinuteBeforeExpiry.diff(new Date());
+      this.scheduleFetch(accountToken, delay);
     }
   }
 
