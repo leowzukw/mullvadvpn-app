@@ -24,6 +24,8 @@ Line wrap the file at 100 chars.                                              Th
 
 ## [Unreleased]
 ### Added
+- Show system notification when account has expired.
+
 #### Android
 - Add buttons to buy credit and redeem voucher in Account screen.
 - Show a notification banner warning when the account time will soon run out.
