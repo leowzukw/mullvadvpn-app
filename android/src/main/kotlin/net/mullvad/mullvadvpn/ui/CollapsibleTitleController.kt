@@ -143,6 +143,9 @@ class CollapsibleTitleController(val parentView: View, scrollAreaId: Int = R.id.
         get() = scrollInterpolation.end
 
     init {
+        collapsedTitleLayoutListener.listener()
+        expandedTitleLayoutListener.listener()
+        titleLayoutListener.listener()
         update()
     }
 
