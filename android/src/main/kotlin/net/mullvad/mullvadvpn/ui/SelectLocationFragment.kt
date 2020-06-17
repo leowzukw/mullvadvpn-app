@@ -21,7 +21,9 @@ import net.mullvad.mullvadvpn.relaylist.RelayListAdapter
 import net.mullvad.mullvadvpn.util.AdapterWithHeader
 
 class SelectLocationFragment : ServiceDependentFragment(OnNoService.GoToLaunchScreen) {
+    private lateinit var relayList: RecyclerView
     private lateinit var relayListAdapter: RelayListAdapter
+    private lateinit var titleController: CollapsibleTitleController
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,11 +51,15 @@ class SelectLocationFragment : ServiceDependentFragment(OnNoService.GoToLaunchSc
 
         view.findViewById<ImageButton>(R.id.close).setOnClickListener { close() }
 
-        view.findViewById<RecyclerView>(R.id.relay_list).apply {
+        relayList = view.findViewById<RecyclerView>(R.id.relay_list).apply {
             layoutManager = LinearLayoutManager(parentActivity)
             adapter = AdapterWithHeader(relayListAdapter, R.layout.select_location_header)
 
             addItemDecoration(RelayItemDividerDecoration(parentActivity))
+
+            onHeaderAvailable = {
+                titleController = CollapsibleTitleController(parentView, R.id.relay_list)
+            }
         }
 
         return view
@@ -71,10 +77,13 @@ class SelectLocationFragment : ServiceDependentFragment(OnNoService.GoToLaunchSc
         relayListListener.onRelayListChange = null
     }
 
-    fun close() {
-        activity?.onBackPressed()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        titleController.onDestroy()
     }
 
+    fun close() {
+        activity?.onBackPressed()
     }
 
     private fun updateLocationConstraint(relayItem: RelayItem?) {
