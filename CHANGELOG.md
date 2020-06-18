@@ -23,6 +23,9 @@ Line wrap the file at 100 chars.                                              Th
 
 
 ## [Unreleased]
+### Changed
+#### Android
+- Changed how the Select Location screen scrolls so that more items can be viewed at the same time.
 
 
 ## [2020.5-beta2] - 2020-06-16
